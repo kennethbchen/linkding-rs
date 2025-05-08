@@ -122,6 +122,7 @@ pub struct ListBookmarksArgs {
     pub query: Option<String>,
     pub limit: Option<i32>,
     pub offset: Option<i32>,
+    pub unread: Option<bool>,
 }
 
 impl QueryString for ListBookmarksArgs {
@@ -130,6 +131,16 @@ impl QueryString for ListBookmarksArgs {
             ("q", self.query.as_ref().map(|v| v.to_string())),
             ("limit", self.limit.as_ref().map(|v| v.to_string())),
             ("offset", self.offset.as_ref().map(|v| v.to_string())),
+            (
+                "unread",
+                self.unread.map(|v| {
+                    if v {
+                        "yes".to_string()
+                    } else {
+                        "no".to_string()
+                    }
+                }),
+            ),
         ]
         .iter()
         .filter_map(|(k, v)| v.as_ref().map(|v| format!("{}={}", k, v)))
